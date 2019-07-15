@@ -7,5 +7,5 @@ wdk 1803
 sdk 1803  
 
 # Support
-Win 7 
-Part of the win10 
+Win 7  
+Part of the win10  
