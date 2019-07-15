@@ -16,3 +16,7 @@ Part of the win10
 SuperModule::OneKeyBypass3X0  
 超级模块.一键干3X0()
 (ヾ(≧O≦)〃~)
+
+# announcements
+After a while (a few minutes to 10 minutes), 3X0***.sys restarts two processes: ZhudongFangyu and its tray program.  
+Recommended to start a thread or DPC timing detection and kill.  
