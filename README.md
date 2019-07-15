@@ -9,3 +9,10 @@ sdk 1803
 # Support
 Win 7  
 Part of the win10  
+(waiting for complete)
+
+
+# Use
+SuperModule::OneKeyBypass3X0();  
+超级模块.一键干3X0()
+(ヾ(≧O≦)〃~)
