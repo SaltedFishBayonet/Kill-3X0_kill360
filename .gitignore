@@ -190,7 +190,7 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
-# ---- Ignore CPP common temporary
+# --------- Ignore CPP common temporary ---------
 # Prerequisites
 *.d
 
