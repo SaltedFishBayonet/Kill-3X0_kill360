@@ -230,3 +230,6 @@ ModelManifest.xml
 *.sln.docstates
 *.tlog
 *.db
+
+# extern 
+.vs
