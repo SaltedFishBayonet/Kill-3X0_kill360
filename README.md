@@ -13,6 +13,6 @@ Part of the win10
 
 
 # Use
-SuperModule::OneKeyBypass3X0();  
+SuperModule::OneKeyBypass3X0  
 超级模块.一键干3X0()
 (ヾ(≧O≦)〃~)
