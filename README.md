@@ -10,15 +10,16 @@ sdk 1803
 F7  
 
 # Support
-Only X64
+Only X64  
 Win 7  
 Part of the win10 (waiting for complete)  
 
 
 # Use
 SuperModule::OneKeyBypass3X0  
-超级模块.一键干3X0()
-(ヾ(≧O≦)〃~)
+超级模块.一键干3X0()  
+(ヾ(≧O≦)〃~)  
 
 # Announcements
-After a while (a few minutes to 10+ minutes), 3X0***.sys restarts two processes: ZhudongFangyu and its tray
+After a while (a few minutes to 10+ minutes), 3X0***.sys restarts two processes: ZhudongFangyu and its tray program.  
+Considering the risk of unloading kernel modules is too great, it is recommended to start a thread or DPC to detect and kill periodically.    
