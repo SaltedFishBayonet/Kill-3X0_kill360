@@ -20,5 +20,5 @@ SuperModule::OneKeyBypass3X0
 超级模块.一键干3X0()
 (ヾ(≧O≦)〃~)
 
-# announcements
+# Announcements
 After a while (a few minutes to 10+ minutes), 3X0***.sys restarts two processes: ZhudongFangyu and its tray
