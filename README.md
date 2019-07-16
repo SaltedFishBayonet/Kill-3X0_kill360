@@ -12,8 +12,7 @@ F7
 # Support
 Only X64
 Win 7  
-Part of the win10  
-(waiting for complete)
+Part of the win10 (waiting for complete)  
 
 
 # Use
