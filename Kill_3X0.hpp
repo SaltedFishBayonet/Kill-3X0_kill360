@@ -164,20 +164,19 @@ namespace rush_duck_pass {
 		return StringName;
 	}
 
-
+	ULONG gVersion = 0;
 	inline PUCHAR Get_PsTerminateSystemThread_Addr() {
 		UNICODE_STRING funcName = RTL_CONSTANT_STRING(L"PsTerminateSystemThread");
 		UCHAR* baseAddr = (UCHAR*)MmGetSystemRoutineAddress(&funcName);
 
-		ULONG version = 0;
-		version = MyGetBigVersion(rush_duck_version::MyGetVersion());
+		gVersion = MyGetBigVersion(rush_duck_version::MyGetVersion());
 		UCHAR *feature = NULL;
-		//DbgPrint("big version is:%d \n", version);
-		if (version == WIN7) {
+		//DbgPrint("big gVersion is:%d \n", gVersion);
+		if (gVersion == WIN7) {
 			feature = Win7_Feature;
 			DbgPrint("Winsows 7 \n");
 		}
-		else if (version == WIN10) {
+		else if (gVersion == WIN10) {
 			feature = Win10_Feature;
 			DbgPrint("Windows 10\n");
 		}
@@ -257,6 +256,8 @@ namespace rush_duck_pass {
 namespace rush_duck_enum {
 	UCHAR Proc_Arr_Win7_Feature[] = { 0x4c,0x8d,0x35 };
 	UCHAR Proc_Arr_Win10_Feature[] = { 0x4c,0x8d,0x3d };
+
+	UCHAR pspCreateFuncCommonFeature[] = { 0xE9 };
 	typedef struct _SYSTEM_MODULE_INFORMATION_ENTRY {
 		ULONG Unkonw1;
 		ULONG Unkonw2;
@@ -340,6 +341,10 @@ namespace rush_duck_enum {
 	MY_SIMPLE_SYS_INFORMATION gFindSys[30] = { 0 };
 	USHORT gFindIndex = 0;
 	inline BOOLEAN Find3X0Module() {
+		// 似乎win10不会出现回调卡进程的情况，就不处理了
+		if (rush_duck_pass::gVersion == WIN10) {
+			return FALSE;
+		}
 		CHAR findCh[] = "360";
 		ULONG needSize, i, moduleCount, bufferSize = 0x5'000;
 		BOOLEAN isFind = FALSE;
@@ -379,7 +384,7 @@ namespace rush_duck_enum {
 			DbgPrint("Not Find \n");
 		}
 		ExFreePool(pBuffer);
-		return TRUE;
+		return isFind;
 	}
 
 	/////////////////////////////////////////////////////
@@ -389,19 +394,27 @@ namespace rush_duck_enum {
 		LONG OffsetAddr = 0;
 		PUCHAR pCheckArea = NULL;
 		UNICODE_STRING unstrFunc;
-		// PsSet addr
+		// PsSet* addr
 		RtlInitUnicodeString(&unstrFunc, L"PsSetCreateProcessNotifyRoutine");
 		pCheckArea = (PUCHAR)MmGetSystemRoutineAddress(&unstrFunc);
-		// PspSet addr
-		memcpy(&OffsetAddr, (PUCHAR)pCheckArea + 4, 4);
-		pCheckArea = pCheckArea + 3 + 5 + OffsetAddr;
+		// PspSet* addr
+		//memcpy(&OffsetAddr, (PUCHAR)pCheckArea + 4, 4);
+		//pCheckArea = pCheckArea + 3 + 5 + OffsetAddr;
+		pCheckArea = rush_duck_pass::SearchAddrByFeature(pCheckArea, pspCreateFuncCommonFeature, 1);
+		if (pCheckArea == NULL) {
+			return NULL;
+		}
+		ULONG asmByte = 5;
+		ULONG operateNumber = *(PULONG)(pCheckArea + 1);
+		pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + operateNumber)); // 这里的跳转，可能需要丢弃低32位的进位
+
 		//DbgPrint("PspSetCreateProcessNotifyRoutine:%p", pCheckArea);
-		// PspCreate Arr addr
+		// PspCreate* Arr addr
 		UCHAR* feature = Proc_Arr_Win7_Feature;
 		pCheckArea = rush_duck_pass::SearchAddrByFeature(pCheckArea, feature, 3);
-		ULONG asmByte = 7;
-		ULONG32 operateNumber = *((PULONG32)(pCheckArea + 3));
-		pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + operateNumber));  // 这里的跳转，需要丢弃低32位的进位
+		asmByte = 7;
+		operateNumber = *((PULONG32)(pCheckArea + 3));
+		pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + operateNumber));  
 		return pCheckArea;
 	}
 
