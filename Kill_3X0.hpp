@@ -411,17 +411,14 @@ namespace rush_duck_enum {
 			return (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opreateNumber));
 		};
 		pCheckArea = calcJumpAddrFunc(asmByte, opreateNumber);
-		//pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opreateNumber));
-
 		//DbgPrint("PspSetCreateProcessNotifyRoutine:%p", pCheckArea);
+
 		// PspCreate* Arr addr
 		UCHAR* feature = Proc_Arr_Win7_Feature;
 		pCheckArea = rush_duck_pass::SearchAddrByFeature(pCheckArea, feature, 3);
 		asmByte = 7;
 		opreateNumber = *((PULONG32)(pCheckArea + 3));
-		pCheckArea = calcJumpAddrFunc(asmByte, opreateNumber);
-		//pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opreateNumber));  
-		return pCheckArea;
+		return calcJumpAddrFunc(asmByte, opreateNumber);
 	}
 
 	inline NTSTATUS RemoveProcessNotify() {
