@@ -414,6 +414,9 @@ namespace rush_duck_enum {
 		// PspCreate* Arr addr
 		UCHAR* feature = Proc_Arr_Win7_Feature;
 		pCheckArea = rush_duck_pass::SearchAddrByFeature(pCheckArea, feature, 3);
+		if (pCheckArea == NULL) {
+			return NULL;
+		}
 		asmByte = 7;
 		opreateNumber = *((PULONG32)(pCheckArea + 3));
 		return calcJumpAddrFunc(asmByte, opreateNumber);
