@@ -398,8 +398,6 @@ namespace rush_duck_enum {
 		RtlInitUnicodeString(&unstrFunc, L"PsSetCreateProcessNotifyRoutine");
 		pCheckArea = (PUCHAR)MmGetSystemRoutineAddress(&unstrFunc);
 		// PspSet* addr
-		//memcpy(&OffsetAddr, (PUCHAR)pCheckArea + 4, 4);
-		//pCheckArea = pCheckArea + 3 + 5 + OffsetAddr;
 		pCheckArea = rush_duck_pass::SearchAddrByFeature(pCheckArea, pspCreateFuncCommonFeature, 1);
 		if (pCheckArea == NULL) {
 			return NULL;
