@@ -405,16 +405,22 @@ namespace rush_duck_enum {
 			return NULL;
 		}
 		ULONG asmByte = 5;
-		ULONG opCode = *(PULONG)(pCheckArea + 1);
-		pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opCode)); // 这里的跳转，需要丢弃进位，因为opCode其实是有符号的
+		ULONG opreateNumber = *(PULONG)(pCheckArea + 1); 
+		// 这里的跳转，需要丢弃低32位的进位，因为opreateNumber其实是解释成有符号的
+		auto calcJumpAddrFunc = [=](ULONG asmByte, ULONG opreateNumber)-> PUCHAR {
+			return (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opreateNumber));
+		};
+		pCheckArea = calcJumpAddrFunc(asmByte, opreateNumber);
+		//pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opreateNumber));
 
 		//DbgPrint("PspSetCreateProcessNotifyRoutine:%p", pCheckArea);
 		// PspCreate* Arr addr
 		UCHAR* feature = Proc_Arr_Win7_Feature;
 		pCheckArea = rush_duck_pass::SearchAddrByFeature(pCheckArea, feature, 3);
 		asmByte = 7;
-		opCode = *((PULONG32)(pCheckArea + 3));
-		pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opCode));  
+		opreateNumber = *((PULONG32)(pCheckArea + 3));
+		pCheckArea = calcJumpAddrFunc(asmByte, opreateNumber);
+		//pCheckArea = (PUCHAR)(((ULONG64)pCheckArea & 0xFFFF'FFFF'0000'0000) + (ULONG32)((ULONG32)pCheckArea + asmByte + opreateNumber));  
 		return pCheckArea;
 	}
 
