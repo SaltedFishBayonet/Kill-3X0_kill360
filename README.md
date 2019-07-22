@@ -23,3 +23,5 @@ SuperModule::OneKeyBypass3X0
 # Announcements
 After a while (a few minutes to 10+ minutes), 3X0***.sys restarts two processes: ZhudongFangyu and its tray program.  
 Considering the risk of unloading kernel modules is too great, it is recommended to start a thread or DPC to detect and kill periodically.    
+
+
